@@ -1,15 +1,6 @@
 package eu.rekawek.coffeegb.cpu.opcode;
 
-import eu.rekawek.coffeegb.AddressSpace;
-import eu.rekawek.coffeegb.cpu.BitUtils;
-import eu.rekawek.coffeegb.cpu.Flags;
-import eu.rekawek.coffeegb.cpu.InterruptManager;
-import eu.rekawek.coffeegb.cpu.Registers;
-import eu.rekawek.coffeegb.cpu.AluFunctions;
-import eu.rekawek.coffeegb.cpu.op.Argument;
-import eu.rekawek.coffeegb.cpu.op.DataType;
-import eu.rekawek.coffeegb.cpu.op.Op;
-import eu.rekawek.coffeegb.gpu.SpriteBug;
+import static eu.rekawek.coffeegb.cpu.BitUtils.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +8,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static eu.rekawek.coffeegb.cpu.BitUtils.toWord;
+import eu.rekawek.coffeegb.AddressSpace;
+import eu.rekawek.coffeegb.cpu.AluFunctions;
+import eu.rekawek.coffeegb.cpu.BitUtils;
+import eu.rekawek.coffeegb.cpu.Flags;
+import eu.rekawek.coffeegb.cpu.InterruptManager;
+import eu.rekawek.coffeegb.cpu.Registers;
+import eu.rekawek.coffeegb.cpu.op.Argument;
+import eu.rekawek.coffeegb.cpu.op.DataType;
+import eu.rekawek.coffeegb.cpu.op.Op;
+import eu.rekawek.coffeegb.gpu.SpriteBug;
 
 public class OpcodeBuilder {
 
@@ -407,7 +407,7 @@ public class OpcodeBuilder {
 
             @Override
             public String toString() {
-                return String.format("%s(HL) → [__]");
+                return String.format("%s(HL) → [__]", operation);
             }
         });
         store("HL");

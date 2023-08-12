@@ -1,15 +1,14 @@
 package eu.rekawek.coffeegb.cpu;
 
+import java.util.List;
+
 import eu.rekawek.coffeegb.AddressSpace;
 import eu.rekawek.coffeegb.cpu.op.Op;
 import eu.rekawek.coffeegb.cpu.opcode.Opcode;
 import eu.rekawek.coffeegb.gpu.Display;
 import eu.rekawek.coffeegb.gpu.Gpu;
 import eu.rekawek.coffeegb.gpu.GpuRegister;
-import eu.rekawek.coffeegb.gpu.Lcdc;
 import eu.rekawek.coffeegb.gpu.SpriteBug;
-
-import java.util.List;
 
 public class Cpu {
 
@@ -182,6 +181,7 @@ public class Cpu {
                             handleSpriteBug(corruptionType);
                         }
                         opContext = op.execute(registers, addressSpace, operand, opContext);
+                        //System.out.println(op.toString());
                         op.switchInterrupts(interruptManager);
 
                         if (!op.proceed(registers)) {
