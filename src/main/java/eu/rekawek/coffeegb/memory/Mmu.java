@@ -1,20 +1,20 @@
 package eu.rekawek.coffeegb.memory;
 
-import eu.rekawek.coffeegb.AddressSpace;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static eu.rekawek.coffeegb.cpu.BitUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.rekawek.coffeegb.cpu.BitUtils.checkByteArgument;
-import static eu.rekawek.coffeegb.cpu.BitUtils.checkWordArgument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.rekawek.coffeegb.AddressSpace;
 
 public class Mmu implements AddressSpace {
 
     private static final Logger LOG = LoggerFactory.getLogger(Mmu.class);
 
-    private static final AddressSpace VOID = new AddressSpace() {
+    private static final AddressSpace VOID = new AddressSpace() { // 익명 클래스...
         @Override
         public boolean accepts(int address) {
             return true;
@@ -59,7 +59,7 @@ public class Mmu implements AddressSpace {
     @Override
     public int getByte(int address) {
         checkWordArgument("address", address);
-        return getSpace(address).getByte(address);
+        return getSpace(address).getByte(address); // VOID ??
     }
 
     private AddressSpace getSpace(int address) {
