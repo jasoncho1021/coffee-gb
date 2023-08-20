@@ -8,6 +8,7 @@ import eu.rekawek.coffeegb.debug.Console;
 import eu.rekawek.coffeegb.gpu.Display;
 import eu.rekawek.coffeegb.memory.cart.Cartridge;
 import eu.rekawek.coffeegb.serial.SerialEndpoint;
+import eu.rekawek.coffeegb.serial.SerialPort;
 import eu.rekawek.coffeegb.sound.SoundOutput;
 
 import javax.swing.*;
@@ -42,12 +43,14 @@ public class Emulator {
     private final Optional<Console> console;
 
     private JFrame mainWindow;
+    private int idx;
 
-    public Emulator(String[] args, Properties properties) throws IOException {
+    public Emulator(String[] args, Properties properties, SerialEndpoint serialEndpoint, int idx) throws IOException {
+        this.idx = idx;
         options = parseArgs(args);
         rom = new Cartridge(options);
         speedMode = new SpeedMode();
-        serialEndpoint = SerialEndpoint.NULL_ENDPOINT;
+        this.serialEndpoint = serialEndpoint;//new SystemOutSerialEndpoint();//SerialEndpoint.NULL_ENDPOINT;
         console = options.isDebug() ? Optional.of(new Console()) : Optional.empty();
         console.map(Thread::new).ifPresent(Thread::start);
 
@@ -60,7 +63,7 @@ public class Emulator {
             sound = new AudioSystemSoundOutput();
             display = new SwingDisplay(SCALE);
             controller = new SwingController(properties);
-            gameboy = new Gameboy(options, rom, display, controller, sound, serialEndpoint, console);
+            gameboy = new Gameboy(options, rom, display, controller, SoundOutput.NULL_OUTPUT, serialEndpoint, console); // sound
         }
         console.ifPresent(c -> c.init(gameboy));
     }
@@ -119,7 +122,8 @@ public class Emulator {
     private void startGui() {
         display.setPreferredSize(new Dimension(160 * SCALE, 144 * SCALE));
 
-        mainWindow = new JFrame("Coffee GB: " + rom.getTitle());
+        //mainWindow = new JFrame("Coffee GB: " + rom.getTitle());
+        mainWindow = new JFrame("Coffee GB: " + idx);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setLocationRelativeTo(null);
 
@@ -138,5 +142,9 @@ public class Emulator {
         display.stop();
         gameboy.stop();
         mainWindow.dispose();
+    }
+
+    public SerialPort getSerialPort() {
+        return gameboy.getSerialPort();
     }
 }

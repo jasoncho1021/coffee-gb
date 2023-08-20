@@ -164,7 +164,7 @@ public class ShowBackground implements Command {
                         AddressSpace bank = attr.getBank() == 0 ? videoRam0 : videoRam1;
                         int b1 = bank.getByte(tileAddress + i);
                         int b2 = bank.getByte(tileAddress + i + 1);
-                        zip(b1, b2, attr.isXflip(), tile[i/2]);
+                        zip(b1, b2, attr.isXflip(), tile[i / 2]);
                     }
                     if (attr.isYflip()) {
                         for (int i = 0; i < 8; i++) {
@@ -223,7 +223,7 @@ public class ShowBackground implements Command {
                 drawLine(g2d, x1, y1, x1, y1 + 144);
             } else {
                 drawLine(g2d, x1, y1, x1, 255);
-                drawLine(g2d, x1, 0, x1 , y1+ 144 - 256);
+                drawLine(g2d, x1, 0, x1, y1 + 144 - 256);
             }
         }
 

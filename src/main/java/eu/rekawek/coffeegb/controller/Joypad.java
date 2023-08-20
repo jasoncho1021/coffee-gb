@@ -3,10 +3,15 @@ package eu.rekawek.coffeegb.controller;
 import eu.rekawek.coffeegb.AddressSpace;
 import eu.rekawek.coffeegb.cpu.InterruptManager;
 
+import eu.rekawek.coffeegb.serial.SerialPort;
 import java.util.HashSet;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Joypad implements AddressSpace {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Joypad.class);
 
     private Set<ButtonListener.Button> buttons = new HashSet<>();
 
@@ -18,6 +23,7 @@ public class Joypad implements AddressSpace {
             public void onButtonPress(Button button) {
                 interruptManager.requestInterrupt(InterruptManager.InterruptType.P10_13);
                 buttons.add(button);
+                LOG.info("pressed {}",button);
             }
 
             @Override
@@ -42,6 +48,7 @@ public class Joypad implements AddressSpace {
         int result = p1 | 0b11001111;
         for (ButtonListener.Button b : buttons) {
             if ((b.getLine() & p1) == 0) {
+                LOG.info("Joypad {}",b);
                 result &= 0xff & ~b.getMask();
             }
         }

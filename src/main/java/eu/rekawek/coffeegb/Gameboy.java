@@ -61,11 +61,13 @@ public class Gameboy implements Runnable {
 
     private final List<Runnable> tickListeners = new ArrayList<>();
 
-    public Gameboy(GameboyOptions options, Cartridge rom, Display display, Controller controller, SoundOutput soundOutput, SerialEndpoint serialEndpoint) {
+    public Gameboy(GameboyOptions options, Cartridge rom, Display display, Controller controller,
+            SoundOutput soundOutput, SerialEndpoint serialEndpoint) {
         this(options, rom, display, controller, soundOutput, serialEndpoint, Optional.empty());
     }
 
-    public Gameboy(GameboyOptions options, Cartridge rom, Display display, Controller controller, SoundOutput soundOutput, SerialEndpoint serialEndpoint, Optional<Console> console) {
+    public Gameboy(GameboyOptions options, Cartridge rom, Display display, Controller controller,
+            SoundOutput soundOutput, SerialEndpoint serialEndpoint, Optional<Console> console) {
         this.display = display;
         gbc = rom.isGbc();
         speedMode = new SpeedMode();
@@ -199,5 +201,9 @@ public class Gameboy implements Runnable {
 
     public Sound getSound() {
         return sound;
+    }
+
+    public SerialPort getSerialPort() {
+        return serialPort;
     }
 }

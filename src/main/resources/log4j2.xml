@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Properties>
+    <Property name="logNm">emul</Property>
+    <Property name="runid">$${date:YYYY-MM-dd HH-mm-ss}</Property>
+    <Property name="layoutPattern">%d{HH:mm:ss.SSS} priority="%tp" "%tn" [%-5p] %m%n
+    </Property>
+  </Properties>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${layoutPattern}"/>
+    </Console>
+
+    <File name="File" fileName="log/${logNm}_${runid}.log">
+      <PatternLayout pattern="${layoutPattern}"/>
+    </File>
+  </Appenders>
+
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="File"/>
+    </Root>
+  </Loggers>
+</Configuration>
