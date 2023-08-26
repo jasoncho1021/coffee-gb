@@ -1,5 +1,7 @@
 package eu.rekawek.coffeegb.cpu;
 
+import eu.rekawek.coffeegb.controller.Joypad;
+import eu.rekawek.coffeegb.cpu.InterruptManager.InterruptType;
 import java.util.List;
 
 import eu.rekawek.coffeegb.AddressSpace;
@@ -9,8 +11,12 @@ import eu.rekawek.coffeegb.gpu.Display;
 import eu.rekawek.coffeegb.gpu.Gpu;
 import eu.rekawek.coffeegb.gpu.GpuRegister;
 import eu.rekawek.coffeegb.gpu.SpriteBug;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Cpu {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Cpu.class);
 
     public enum State {
         OPCODE, EXT_OPCODE, OPERAND, RUNNING, IRQ_READ_IF, IRQ_READ_IE, IRQ_PUSH_1, IRQ_PUSH_2, IRQ_JUMP, STOPPED, HALTED
@@ -54,7 +60,8 @@ public class Cpu {
 
     private boolean haltBugMode;
 
-    public Cpu(AddressSpace addressSpace, InterruptManager interruptManager, Gpu gpu, Display display, SpeedMode speedMode) {
+    public Cpu(AddressSpace addressSpace, InterruptManager interruptManager, Gpu gpu, Display display,
+            SpeedMode speedMode) {
         this.registers = new Registers();
         this.addressSpace = addressSpace;
         this.interruptManager = interruptManager;
@@ -79,7 +86,8 @@ public class Cpu {
             }
         }
 
-        if (state == State.IRQ_READ_IF || state == State.IRQ_READ_IE || state == State.IRQ_PUSH_1 || state == State.IRQ_PUSH_2 || state == State.IRQ_JUMP) {
+        if (state == State.IRQ_READ_IF || state == State.IRQ_READ_IE || state == State.IRQ_PUSH_1
+                || state == State.IRQ_PUSH_2 || state == State.IRQ_JUMP) {
             handleInterrupt();
             return;
         }
@@ -214,7 +222,7 @@ public class Cpu {
     }
 
     private void handleInterrupt() {
-        switch(state) {
+        switch (state) {
             case IRQ_READ_IF:
                 interruptFlag = addressSpace.getByte(0xff0f);
                 state = State.IRQ_READ_IE;
@@ -224,8 +232,12 @@ public class Cpu {
                 interruptEnabled = addressSpace.getByte(0xffff);
                 requestedIrq = null;
                 for (InterruptManager.InterruptType irq : InterruptManager.InterruptType.values()) {
+                    // traversing order means priority
                     if ((interruptFlag & interruptEnabled & (1 << irq.ordinal())) != 0) {
                         requestedIrq = irq;
+                        if (requestedIrq.equals(InterruptType.Serial)) {//if (requestedIrq.equals(InterruptType.P10_13)) {
+                            LOG.info("interruptFlag {}", interruptFlag);
+                        }
                         break;
                     }
                 }

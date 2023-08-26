@@ -3,8 +3,10 @@ package eu.rekawek.coffeegb.memory;
 import static eu.rekawek.coffeegb.cpu.BitUtils.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +41,7 @@ public class Mmu implements AddressSpace {
     };
 
     private final List<AddressSpace> spaces = new ArrayList<>();
+    private final Map<Integer, AddressSpace> spaceMap = new HashMap<>();
 
     public void addAddressSpace(AddressSpace space) {
         spaces.add(space);
@@ -63,8 +66,13 @@ public class Mmu implements AddressSpace {
     }
 
     private AddressSpace getSpace(int address) {
+        AddressSpace addressSpace = spaceMap.get(address);
+        if (addressSpace != null) {
+            return addressSpace;
+        }
         for (AddressSpace s : spaces) {
             if (s.accepts(address)) {
+                spaceMap.put(address, s);
                 return s;
             }
         }

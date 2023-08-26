@@ -1,33 +1,22 @@
 package eu.rekawek.coffeegb.controller;
 
-<<<<<<< HEAD
+
 import eu.rekawek.coffeegb.AddressSpace;
 import eu.rekawek.coffeegb.cpu.InterruptManager;
 
-import eu.rekawek.coffeegb.serial.SerialPort;
-=======
->>>>>>> master
 import java.util.HashSet;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.rekawek.coffeegb.AddressSpace;
-import eu.rekawek.coffeegb.cpu.InterruptManager;
-
 public class Joypad implements AddressSpace {
-
-<<<<<<< HEAD
     private static final Logger LOG = LoggerFactory.getLogger(Joypad.class);
 
     private Set<ButtonListener.Button> buttons = new HashSet<>();
-=======
-	private Set<ButtonListener.Button> buttons = new HashSet<>();
->>>>>>> master
 
 	private int p1;
 
-<<<<<<< HEAD
+
     public Joypad(InterruptManager interruptManager, Controller controller) {
         controller.setButtonListener(new ButtonListener() {
             @Override
@@ -36,15 +25,6 @@ public class Joypad implements AddressSpace {
                 buttons.add(button);
                 LOG.info("pressed {}",button);
             }
-=======
-	public Joypad(InterruptManager interruptManager, Controller controller) {
-		controller.setButtonListener(new ButtonListener() {
-			@Override
-			public void onButtonPress(Button button) {
-				//interruptManager.requestInterrupt(InterruptManager.InterruptType.P10_13);
-				buttons.add(button);
-			}
->>>>>>> master
 
 			@Override
 			public void onButtonRelease(Button button) {
@@ -64,7 +44,6 @@ public class Joypad implements AddressSpace {
 		//System.out.println("KEY SET BYTE: " + Integer.toHexString(value) + " "+ Integer.toHexString(p1));
 	}
 
-<<<<<<< HEAD
     @Override
     public int getByte(int address) {
         int result = p1 | 0b11001111;
@@ -76,17 +55,4 @@ public class Joypad implements AddressSpace {
         }
         return result;
     }
-=======
-	@Override
-	public int getByte(int address) {
-		int result = p1 | 0b11001111;				// col
-		for (ButtonListener.Button b : buttons) {
-			if ((b.getLine() & p1) == 0) {
-				result &= 0xff & ~b.getMask();
-			}
-		}
-		//System.out.println("KEY GET BYTE: " + Integer.toHexString(result));
-		return result;
-	}
->>>>>>> master
 }

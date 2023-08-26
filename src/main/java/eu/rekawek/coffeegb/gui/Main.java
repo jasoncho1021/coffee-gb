@@ -34,20 +34,20 @@ public class Main {
         SerialPort my;
 
         int transfer(int outgoing) {
-            //SerialPort.get();
+            SerialPort.get();
             LOGGER.info("master transfer start");
-            int ingoing = serialPort.getByte(0xff01);
-            my.setByte(0xff01, ingoing);
-            my.setByte(0xff02, 0x01);
+            int ingoing = serialPort.get(0xff01);
+            my.set(0xff01, ingoing);
+            my.set(0xff02, 0x01);
             my.interrupt();
             LOGGER.info("master transfer end");
 
             LOGGER.info("slave transfer start");
-            serialPort.setByte(0xff01, outgoing);
-            serialPort.setByte(0xff02, 0x00);
+            serialPort.set(0xff01, outgoing);
+            serialPort.set(0xff02, 0x00);
             serialPort.interrupt();
             LOGGER.info("slave transfer end");
-            //SerialPort.free();
+            SerialPort.free();
 
             /*
             jobQueue.add(() -> {

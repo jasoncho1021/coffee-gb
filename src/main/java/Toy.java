@@ -10,7 +10,7 @@ public class Toy {
         Machine machine = new Machine(new JobImpl(a, b) {
             @Override
             public void doJob() { // cartridge
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 20; i++) {
                     a.set(i);
                     b.set(i * 10);
                 }

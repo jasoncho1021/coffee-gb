@@ -13,7 +13,11 @@ public class InterruptManager implements AddressSpace {
             this.handler = handler;
         }
 
+        boolean brk;
         public int getHandler() {
+            if(handler == 0x0058) {
+                brk = true;
+            }
             return handler;
         }
     }

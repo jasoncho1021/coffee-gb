@@ -71,18 +71,6 @@ public class SerialPort implements AddressSpace {
         }
     }
 
-    public synchronized void outgoing(int outgoing) {
-        setByte(0xff01, outgoing);
-        setByte(0xff02, 0x00);
-        interrupt();
-    }
-
-    public synchronized void ingoing(int ingoing) {
-        setByte(0xff01, ingoing);
-        setByte(0xff02, 0x01);
-        interrupt();
-    }
-
     public void interrupt() {
         interruptManager.requestInterrupt(InterruptManager.InterruptType.Serial);
     }
@@ -94,9 +82,9 @@ public class SerialPort implements AddressSpace {
 
     @Override
     public void setByte(int address, int value) {
-        //get();
+        get();
         set(address, value);
-        //free();
+        free();
     }
 
     public void set(int address, int value) {
@@ -116,9 +104,9 @@ public class SerialPort implements AddressSpace {
 
     @Override
     public int getByte(int address) {
-        //get();
+        get();
         int val = get(address);
-        //free();
+        free();
         return val;
     }
 
